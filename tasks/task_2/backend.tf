@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "askhat-zab-tf-state"
-    key    = "task-1/terraform.tfstate"
+    key    = "task-2/terraform.tfstate"
     region = "eu-central-1"
   }
 }

@@ -14,7 +14,7 @@ data "tls_certificate" "github" {
 
 # Create an IAM role
 resource "aws_iam_role" "GithubActionsRole" {
-  name_prefix        = var.name
+  name_prefix        = var.prefix_name
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
@@ -42,31 +42,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
   }
 }
 
-# # Attach the EC2 admin permissions to the IAM role
-# resource "aws_iam_role_policy" "example" {
-#   role   = aws_iam_role.GithubActionsRole.id
-#   policy = data.aws_iam_policy_document.ec2_admin_permissions.json
-# }
-
-# # Create an IAM policy that grants EC2 admin permissions
-# data "aws_iam_policy_document" "ec2_admin_permissions" {
-#   statement {
-#     effect    = "Allow"
-#     actions   = ["ec2:*"]
-#     resources = ["*"]
-#   }
-# }
-
-
-
-
-
-
-
-
-
-
-
+# Attach the necessary policies to the IAM role
 resource "aws_iam_role_policy_attachment" "ec2_full_access" {
   role       = aws_iam_role.GithubActionsRole.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
