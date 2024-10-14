@@ -20,7 +20,7 @@
 
    - Terraform plan is executed successfully.
    - A resource map screenshot is provided (VPC -> Your VPCs -> your_VPC_name -> Resource map).
-    * ![Resource map](images/resource_map.png)
+    ![Resource map](images/resource_map.png)
 
 
 ## 4. **Additional Tasks (30 points)**
@@ -28,6 +28,9 @@
      - Implement security groups and network ACLs for the VPC and subnets.
    - **Bastion Host (5 points)**
      - Create a bastion host for secure access to the private subnets.
+    ![Bastion host check SSH connection](images/ssh_bastion.png)
+      Also check in bottom of Terrafrom Apply job https://github.com/askhat-zab/rsschool-devops-course-tasks/actions/runs/11317534994/job/31471230631
+    ![Bastion host check nginx connection](images/nginx_bastion.png)
    - **NAT is implemented for private subnets (10 points)**
      - Orginize NAT for private subnets with simpler or cheaper way
      - Instances in private subnets should be able to reach addresses outside VPC
