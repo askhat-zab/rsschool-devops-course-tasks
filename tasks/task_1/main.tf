@@ -2,6 +2,6 @@
 module "github-actions-oidc" {
   source                 = "../../modules/github-actions-oidc"
   allowed_repos_branches = var.allowed_repos_branches
-  name                   = var.name
+  prefix_name            = var.prefix_name
 }
 

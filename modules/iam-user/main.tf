@@ -1,3 +1,4 @@
+# create admin IAM user
 resource "aws_iam_user" "admin" {
   name = var.aws_admin_user
   tags = {
@@ -5,6 +6,7 @@ resource "aws_iam_user" "admin" {
   }
 }
 
+# attach necessary policies to the user
 resource "aws_iam_user_policy_attachment" "admin_ec2" {
   user       = aws_iam_user.admin.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
@@ -40,6 +42,7 @@ resource "aws_iam_user_policy_attachment" "admin_eventbridge" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess"
 }
 
+# create new access key for the admin user
 resource "aws_iam_access_key" "admin_key" {
   user = aws_iam_user.admin.name
 }
