@@ -15,3 +15,7 @@ This project contain:
 
 
 
+* [Task 3. Solutions](tasks/task_3/README.md)
+    * [Task 23 Сonditions](https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/2_cluster-configuration/task_3.md)
+
+
