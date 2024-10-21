@@ -4,7 +4,7 @@
 
     - Terraform code is created or extended to manage AWS resources required for the cluster creation.
     - The code includes the creation of a bastion host.
-    ![Check infra provisioning](images/outputs.png)
+![Check infra provisioning](images/outputs.png)
 
 ## 2. **Cluster Deployment (60 points)**
 
@@ -15,13 +15,13 @@
 
     - The cluster is verified by running the kubectl get nodes command from the local computer.
     - A screenshot of the kubectl get nodes command output is provided.
-    ![Check cluster nodes](images/k_get_nodes.png)
+![Check cluster nodes](images/k_get_nodes.png)
 
 ## 4. **Workload Deployment (10 points)**
 
     - A simple workload is deployed on the cluster using kubectl apply -f https://k8s.io/examples/pods/simple-pod.yaml.
     - The workload runs successfully on the cluster.
-    ![Check simple pod is running](images/k_get_pods.png)
+![Check simple pod is running](images/k_get_pods.png)
 
 ## 5. Additional Tasks (10 points)
 
