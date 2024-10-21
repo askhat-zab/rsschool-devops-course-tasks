@@ -1,12 +1,14 @@
 # variables for bootstrap
-variable "aws_profile" {}
+variable "aws_profile" {
+  default = "ROOT"
+}
 variable "aws_region" {}
 variable "aws_admin_user" {}
-variable "env_prefix" {}
-variable "bucket_name" {}
-variable "aws_config_path" {
-  type = list(string)
+variable "env_prefix" {
+  default = "bootstrap"
 }
-variable "aws_creds_path" {
-  type = list(string)
+variable "bucket_name" {
+  default = "askhat-zab-tf-state"
 }
+variable "aws_config_path" {}
+variable "aws_creds_path" {}

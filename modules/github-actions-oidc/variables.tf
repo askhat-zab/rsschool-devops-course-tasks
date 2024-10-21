@@ -18,7 +18,7 @@ variable "allowed_repos_branches" {
   ]
 }
 
-variable "name" {
+variable "prefix_name" {
   type    = string
   default = "github-actions-oidc"
 }
