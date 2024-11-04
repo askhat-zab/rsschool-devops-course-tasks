@@ -112,10 +112,10 @@ jobs:
         id: terraform-outputs
         working-directory: ${{ env.TF_ROOT }}
         run: |
-          BASTION_IP=$(terraform output -raw ec2_bastion_public_ip)
-          BASTION_USER=$(terraform output -raw bastion_user)
-          echo "bastion_host=${BASTION_IP}" >> $GITHUB_OUTPUT
-          echo "bastion_user=${BASTION_USER}" >> $GITHUB_OUTPUT
+              BASTION_IP=$(terraform output -raw ec2_bastion_public_ip | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
+              BASTION_USER=$(terraform output -raw bastion_user | grep -oE '^[a-zA-Z0-9_-]+')
+              echo "bastion_host=${BASTION_IP}" >> $GITHUB_OUTPUT
+              echo "bastion_user=${BASTION_USER}" >> $GITHUB_OUTPUT
           
 
   deploy:
