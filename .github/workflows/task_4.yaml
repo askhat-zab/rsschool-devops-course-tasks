@@ -162,7 +162,7 @@ jobs:
               --create-namespace
             
             # Apply additional manifests
-            kubectl apply -f tasks/task_4/manifests/pv.yaml
+            kubectl apply -f manifests/pv.yaml
           '
           
       - name: Cleanup SSH Key
