@@ -3,7 +3,7 @@ name: "Task 4 cleanup"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *" # daily at 00:00 UTC
+    - cron: "0 * * * *"
 
 env:
   TF_ROOT: tasks/task_4
