@@ -160,9 +160,8 @@ jobs:
             helm upgrade --install jenkins jenkins/jenkins \
               --namespace jenkins \
               --create-namespace
+            helm -n jenkins list
             
-            # Apply additional manifests
-            kubectl apply -f manifests/pv.yaml
           '
           
       - name: Cleanup SSH Key
