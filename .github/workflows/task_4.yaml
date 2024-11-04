@@ -111,8 +111,8 @@ jobs:
       - name: Get Terraform Outputs
         id: terraform-outputs
         run: |
-          echo "bastion_host=$(terraform output -raw ec2_bastion_public_ip)" >> $GITHUB_OUTPUT
-          echo "bastion_user=$(terraform output -raw bastion_user)" >> $GITHUB_OUTPUT
+          echo "bastion_host=$(terraform output -raw ec2_bastion_public_ip | tr -d '\r')" >> $GITHUB_OUTPUT
+          echo "bastion_user=$(terraform output -raw bastion_user | tr -d '\r')" >> $GITHUB_OUTPUT
 
 
   deploy:
