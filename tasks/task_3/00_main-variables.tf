@@ -6,7 +6,7 @@
 
 variable "env_prefix" {
   type    = string
-  default = "task-2"
+  default = "task-3"
 }
 
 # Path to Public Key
