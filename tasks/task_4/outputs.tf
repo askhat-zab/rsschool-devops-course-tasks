@@ -21,6 +21,11 @@ output "ec2_private_ip" {
   value       = [for ec2private in module.ec2_private : ec2private.private_ip]
 }
 
+## bastion_user
+output "bastion_user" {
+  description = "Username to SSH as"
+  value       = "ubuntu"
+}
 
 # ## Curl Test for Bastion Host
 # resource "null_resource" "check_via_curl" {
