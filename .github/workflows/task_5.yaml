@@ -120,7 +120,7 @@ jobs:
           
 
   deploy:
-    name: Deploy Jenkins
+    name: Deploy Wordpress
     needs: apply
     runs-on: ubuntu-latest
     
