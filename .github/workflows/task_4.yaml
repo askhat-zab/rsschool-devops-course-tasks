@@ -1,4 +1,4 @@
-name: "Terraform CI/CD"
+name: "Task 4 CI/CD"
 
 on:
   push:
