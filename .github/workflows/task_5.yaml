@@ -1,16 +1,16 @@
-name: "Task 3 CI/CD"
+name: "Task 5 CI/CD"
 
 on:
   push:
     branches:
-      - task_3
+      - task_5
   #     - main
   # pull_request:
   #   branches:
   #     - main
 
 env:
-  TF_ROOT: tasks/task_3
+  TF_ROOT: tasks/task_5
   AWS_REGION: eu-central-1
   TF_VERSION: "1.6.0"
 
@@ -25,7 +25,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: ${{ env.TF_VERSION }}# Specify your Terraform version
+          terraform_version: ${{ env.TF_VERSION }}
 
       - name: Terraform fmt check
         working-directory: ${{ env.TF_ROOT }}
@@ -73,7 +73,10 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
     needs: plan
-    # if: github.ref == 'refs/heads/main'
+      # if: github.ref == 'refs/heads/main'
+    outputs:
+        bastion_host: ${{ steps.terraform-outputs.outputs.bastion_host }}
+        bastion_user: ${{ steps.terraform-outputs.outputs.bastion_user }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -82,6 +85,8 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -94,10 +99,6 @@ jobs:
               mkdir -p ~/.ssh
               echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
               chmod 600 ~/.ssh/id_ed25519
-  
-      - name: Create public key
-        run: |
-              mkdir -p ~/.ssh
               echo "${{ secrets.AWS_SSH_PUBLIC_KEY }}" > ~/.ssh/id_ed25519.pub
 
       - name: Terraform Init
@@ -108,41 +109,69 @@ jobs:
         working-directory: ${{ env.TF_ROOT }}
         run: terraform apply -auto-approve -parallelism=100
 
-  destroy:
-    name: Terraform Destroy
-    runs-on: ubuntu-latest
+      - name: Get Terraform Outputs
+        id: terraform-outputs
+        working-directory: ${{ env.TF_ROOT }}
+        run: |
+              BASTION_IP=$(terraform output -raw ec2_bastion_public_ip | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
+              BASTION_USER=$(terraform output -raw bastion_user | grep -oE '^[a-zA-Z0-9_-]+')
+              echo "bastion_host=${BASTION_IP}" >> $GITHUB_OUTPUT
+              echo "bastion_user=${BASTION_USER}" >> $GITHUB_OUTPUT
+          
+
+  deploy:
+    name: Deploy Wordpress
     needs: apply
-    # if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
+        uses: actions/checkout@v4
+    
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ env.AWS_REGION }}
 
-      - name: Create private key
+      - name: Configure SSH
         run: |
-              mkdir -p ~/.ssh
-              echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-              chmod 600 ~/.ssh/id_ed25519
-
-      - name: Create public key
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+          
+      - name: Execute Commands via SSH
+        env:
+          BASTION_HOST: ${{ needs.apply.outputs.bastion_host }}
+          BASTION_USER: ${{ needs.apply.outputs.bastion_user }}
         run: |
-              mkdir -p ~/.ssh
-              echo "${{ secrets.AWS_SSH_PUBLIC_KEY }}" > ~/.ssh/id_ed25519.pub
+          # Wait for SSH to become available
+          for i in {1..30}; do
+            if ssh -i ~/.ssh/id_ed25519 -o ConnectTimeout=5 ${BASTION_USER}@${BASTION_HOST} 'exit'; then
+              break
+            fi
+            echo "Waiting for SSH to become available... (attempt $i/30)"
+            sleep 10
+          done
 
-      - name: Terraform Init
-        working-directory: ${{ env.TF_ROOT }}
-        run: terraform init
-
-      - name: Terraform Destroy
-        working-directory: ${{ env.TF_ROOT }}
-        run: terraform destroy -auto-approve -parallelism=100
+          # Install Helm and execute commands
+          ssh -i ~/.ssh/id_ed25519 ${BASTION_USER}@${BASTION_HOST} '
+            # Install Helm
+            curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+            
+            # Add and update Helm repos
+            helm repo add askhat-zab https://askhat-zab.github.io/repo/helm/charts
+            helm repo update
+            
+            # Install WP and MySQL
+            helm upgrade --install task-5-mysql  askhat-zab/task-5-mysql
+            helm upgrade --install task-5-wordpress  askhat-zab/task-5-wordpress
+          '
+          
+      - name: Cleanup SSH Key
+        run: rm -f ~/.ssh/id_ed25519
+        if: always()
