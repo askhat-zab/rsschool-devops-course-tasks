@@ -144,8 +144,8 @@ jobs:
           
       - name: Execute Commands via SSH
         env:
-          BASTION_HOST: ${{ needs.apply.outputs.bastion_host }}
-          BASTION_USER: ${{ needs.apply.outputs.bastion_user }}
+            BASTION_HOST: ${{ needs.apply.outputs.bastion_host }}
+            BASTION_USER: ${{ needs.apply.outputs.bastion_user }}
         run: |
           # Wait for SSH to become available
           for i in {1..30}; do
