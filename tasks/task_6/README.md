@@ -138,7 +138,9 @@ aws ecr get-login-password --region eu-central-1 | docker login --username AWS -
 kubectl create secret generic ecr-secret --namespace=jenkins --from-file=.dockerconfigjson=$HOME/.docker/config.json --dry-run=client -o json | kubectl apply -f -
 ```
 
-
+You need use additional README to create 
+* [Jenkinsfile](https://github.com/askhat-zab/repo/blob/main/README-jenkinsfile.md)
+* [Helm Chart](https://github.com/askhat-zab/repo/blob/main/README.md)
 
 ## Additional Resources
 --------------------

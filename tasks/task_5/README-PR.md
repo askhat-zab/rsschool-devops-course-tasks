@@ -28,7 +28,9 @@
 
     - CI/CD Pipeline (10 points)
         - A CI/CD pipeline is set up to automate the deployment of the application.
+[GHA](https://github.com/askhat-zab/rsschool-devops-course-tasks/actions/runs/11768587651/job/32778597693)
+
     - Documentation (10 points)
         - The application setup and deployment process are documented in a README file.
-[GitHub Repository](https://github.com/askhat-zab/rsschool-devops-course-tasks/blob/task_5/README.md)
+[README](https://github.com/askhat-zab/rsschool-devops-course-tasks/blob/task_5/README.md)
 

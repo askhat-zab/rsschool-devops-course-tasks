@@ -26,7 +26,11 @@ This project contain:
 
 
 * [Task 5. Solutions](tasks/task_5/README.md)
-    * [Task 4 Сonditions](https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/3_ci-configuration/task_5.md)
+    * [Task 5 Сonditions](https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/3_ci-configuration/task_5.md)
 
+
+
+* [Task 6. Solutions](tasks/task_6/README.md)
+    * [Task 6 Сonditions](https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/3_ci-configuration/task_6.md)
 
 
