@@ -26,8 +26,8 @@ variable "public_key_location" {
 #   type        = string
 # }
 
-# variable "aws_region" {
-#   description = "AWS Region"
-#   type        = string
-#   default     = "eu-central-1"
-# }
+variable "aws_region" {
+  description = "AWS Region"
+  type        = string
+  default     = "eu-central-1"
+}
