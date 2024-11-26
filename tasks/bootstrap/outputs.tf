@@ -8,3 +8,4 @@ output "secret_access_key" {
   value     = module.iam-user.admin_key.secret
   sensitive = true
 }
+# value = tostring(module.iam-user.admin_key.secret)

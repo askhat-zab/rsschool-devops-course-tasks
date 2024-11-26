@@ -1,12 +1,12 @@
-name: "Task 4 cleanup"
+name: "Task 5 cleanup"
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 0 * * *" # daily at 00:00 UTC
 
 env:
-  TF_ROOT: tasks/task_4
+  TF_ROOT: tasks/task_6
   AWS_REGION: eu-central-1
   TF_VERSION: "1.6.0"
 

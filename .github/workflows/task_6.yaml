@@ -1,16 +1,16 @@
-name: "Task 4 CI/CD"
+name: "Task 6 CI/CD"
 
 on:
   push:
     branches:
-      - task_4
+      - task_6
   #     - main
   # pull_request:
   #   branches:
   #     - main
 
 env:
-  TF_ROOT: tasks/task_4
+  TF_ROOT: tasks/task_6
   AWS_REGION: eu-central-1
   TF_VERSION: "1.6.0"
 
@@ -164,13 +164,8 @@ jobs:
             ./get_helm.sh
             
             # Add and update Helm repos
-            helm repo add bitnami https://charts.bitnami.com/bitnami
             helm repo add jenkins https://charts.jenkins.io
             helm repo update
-            
-            # Install nginx from Bitnami
-            helm upgrade --install bitnami-nginx bitnami/nginx
-            helm list
             
             # Create Jenkins namespace and install Jenkins
             helm upgrade --install jenkins jenkins/jenkins \
