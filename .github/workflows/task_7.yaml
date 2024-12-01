@@ -120,7 +120,7 @@ jobs:
           echo "bastion_user=${BASTION_USER}" >> $GITHUB_OUTPUT
 
   deploy:
-    name: Deploy Jenkins
+    name: Deploy monitoring
     needs: apply
     runs-on: ubuntu-latest
 

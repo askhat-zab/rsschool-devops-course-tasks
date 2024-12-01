@@ -16,6 +16,12 @@ variable "public_key_location" {
   default     = "~/.ssh/id_ed25519.pub"
 }
 
+variable "aws_region" {
+  description = "AWS Region"
+  type        = string
+  default     = "eu-central-1"
+}
+
 # variable "access_key_id" {
 #   description = "AWS Access Key"
 #   type        = string
@@ -26,8 +32,4 @@ variable "public_key_location" {
 #   type        = string
 # }
 
-# variable "aws_region" {
-#   description = "AWS Region"
-#   type        = string
-#   default     = "eu-central-1"
-# }
+
