@@ -16,15 +16,15 @@ variable "public_key_location" {
   default     = "~/.ssh/id_ed25519.pub"
 }
 
-# variable "access_key_id" {
-#   description = "AWS Access Key"
-#   type        = string
-# }
+variable "access_key_id" {
+  description = "AWS Access Key"
+  type        = string
+}
 
-# variable "secret_access_key" {
-#   description = "AWS Secret Access Key"
-#   type        = string
-# }
+variable "secret_access_key" {
+  description = "AWS Secret Access Key"
+  type        = string
+}
 
 variable "aws_region" {
   description = "AWS Region"
