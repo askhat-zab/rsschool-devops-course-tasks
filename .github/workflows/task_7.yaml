@@ -143,6 +143,7 @@ jobs:
           echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
 
       - name: Execute Commands via SSH
+        working-directory: ${{ env.TF_ROOT }}
         env:
           BASTION_HOST: ${{ needs.apply.outputs.bastion_host }}
           BASTION_USER: ${{ needs.apply.outputs.bastion_user }}
@@ -168,7 +169,7 @@ jobs:
             helm repo update
             
             # Create monitoring namespace and install prometheus
-            helm upgrade --install prometheus bitnami/prometheu \
+            helm upgrade --install prometheus bitnami/prometheus \
               --namespace monitoring \
               --create-namespace  \
               --atomic \
@@ -184,7 +185,6 @@ jobs:
             helm -n monitoring ls
             
           '
-
       - name: Cleanup SSH Key
         run: rm -f ~/.ssh/id_ed25519
         if: always()
