@@ -6,7 +6,7 @@
 
 variable "env_prefix" {
   type    = string
-  default = "task-7"
+  default = "task-8"
 }
 
 # Path to Public Key
@@ -21,7 +21,6 @@ variable "aws_region" {
   type        = string
   default     = "eu-central-1"
 }
-
 
 # variable "access_key_id" {
 #   description = "AWS Access Key"
