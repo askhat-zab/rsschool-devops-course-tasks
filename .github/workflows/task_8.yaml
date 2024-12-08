@@ -1,16 +1,16 @@
-name: "Task 7 CI/CD"
+name: "Task 8 CI/CD"
 
 on:
   push:
     branches:
-      - task_7
+      - task_8
   #     - main
   # pull_request:
   #   branches:
   #     - main
 
 env:
-  TF_ROOT: tasks/task_7
+  TF_ROOT: tasks/task_8
   AWS_REGION: eu-central-1
   TF_VERSION: "1.6.0"
 
@@ -147,6 +147,7 @@ jobs:
         env:
           BASTION_HOST: ${{ needs.apply.outputs.bastion_host }}
           BASTION_USER: ${{ needs.apply.outputs.bastion_user }}
+          GRAFANA_SECRET: ${{ secrets.GRAFANA_SECRET }}
         run: |
           # Wait for SSH to become available
           for i in {1..30}; do
@@ -159,31 +160,44 @@ jobs:
 
           # Install Helm and execute commands
           ssh -i ~/.ssh/id_ed25519 ${BASTION_USER}@${BASTION_HOST} '
-            # Install Helm
-            curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-            chmod 700 get_helm.sh
-            ./get_helm.sh
             
-            # Add and update Helm repos
-            helm repo add bitnami https://charts.bitnami.com/bitnami
-            helm repo update
-            
-            # Create monitoring namespace and install prometheus
-            helm upgrade --install prometheus bitnami/prometheus \
-              --namespace monitoring \
-              --create-namespace  \
-              --atomic \
-              -f prometheus-values.yaml
+          # Add and update Helm repos
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo update
+          
+          # Create monitoring namespace and install prometheus
+          helm upgrade --install prometheus bitnami/prometheus \
+            --namespace monitoring \
+            --create-namespace  \
+            --atomic \
+            -f prometheus-values.yaml
 
-            # Create monitoring namespace and install KSM
-            helm upgrade --install kube-state-metrics bitnami/kube-state-metrics \
-              --namespace monitoring \
-              --create-namespace  \
-              --atomic 
+          # Create monitoring namespace and install KSM
+          helm upgrade --install kube-state-metrics bitnami/kube-state-metrics \
+            --namespace monitoring \
+            --create-namespace  \
+            --atomic 
 
-            # Check installation
-            helm -n monitoring ls
-            
+          # Create secret for Grafana
+          kubectl create secret generic grafana-secret \
+            --from-literal=password=${GRAFANA_SECRET} \
+            --namespace=monitoring
+
+          # Create dashboard-configmap for Grafana
+          kubectl create configmap dashboard-ksm \
+            --from-file=13332_rev12.json \
+            --namespace=monitoring
+
+          # Create monitoring namespace and install Grafana
+          helm upgrade --install grafana bitnami/grafana \
+            --namespace monitoring \
+            --create-namespace  \
+            --atomic \
+            -f grafana-values.yaml
+
+          # Check installation
+          helm -n monitoring ls
+          
           '
       - name: Cleanup SSH Key
         run: rm -f ~/.ssh/id_ed25519
