@@ -34,7 +34,9 @@ This project contain:
     * [Task 7 Сonditions](https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/4_monitoring-configuration/task_7.md)
 
 
-
 * [Task 8. Solutions](tasks/task_8/README.md)
     * [Task 8 Сonditions](https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/4_monitoring-configuration/task_8.md)
 
+
+* [Task 9. Solutions](tasks/task_9/README.md)
+    * [Task 9 Сonditions](https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/4_monitoring-configuration/task_9.md)
