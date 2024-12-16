@@ -1,0 +1,38 @@
+alertmanager:
+  enabled: false
+
+server:
+  networkPolicy:
+    enabled: false
+  service:
+    type: ClusterIP
+  persistence:
+    enabled: true
+  extraScrapeConfigs:
+    - job_name: "kube-state-metrics"
+      metrics_path: /metrics
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels:
+            [__meta_kubernetes_service_name, __meta_kubernetes_namespace]
+          action: keep
+          regex: kube-state-metrics;monitoring
+    - job_name: "grafana"
+      metrics_path: /metrics
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels:
+            [__meta_kubernetes_service_name, __meta_kubernetes_namespace]
+          action: keep
+          regex: grafana;monitoring
+    - job_name: "node-exporter"
+      metrics_path: /metrics
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels:
+            [__meta_kubernetes_service_name, __meta_kubernetes_namespace]
+          action: keep
+          regex: prometheus-node-exporter;monitoring

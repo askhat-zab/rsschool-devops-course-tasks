@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-email-contact-point
+  namespace: monitoring
+data:
+  contact-points.yaml: |
+    apiVersion: v1alpha1
+    kind: ContactPoint
+    metadata:
+      name: aws-email
+    spec:
+      type: email
+      settings:
+        addresses:
+          - "askhatecc@example.com"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-k3s-node-alerts
+  namespace: monitoring
+data:
+  alert-rules.yaml: |
+    groups:
+      - name: course-alerts
+        rules:
+          - alert: High CPU utilization on node
+            expr: sum(rate(node_cpu_seconds_total{mode!="idle"}[1m])) by (instance) / sum(node:node_num_cpu:sum) by (instance) > 0.8
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "High CPU usage on node detected"
+              description: "CPU usage is above 80% for more than 5 minutes."
+          - alert: Lack of RAM capacity on node
+            expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) < 0.2
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Lack of RAM usage on node detected"
+              description: "Lack of RAM usage is above 80% for more than 5 minutes."
+  notification-policies.yaml: |
+    notificationPolicies:
+      - receiver: aws-email
+        group_by: [alertname]
+        matchers:
+          - severity = critical
+        continue: false

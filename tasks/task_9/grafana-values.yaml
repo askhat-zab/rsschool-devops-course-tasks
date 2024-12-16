@@ -1,0 +1,43 @@
+admin:
+  existingSecret: "grafana-secret"
+
+config:
+  useGrafanaIniFile: true
+  grafanaIniConfigMap: ""
+  grafanaIniSecret: "grafana-ini-secret"
+
+dashboardsProvider:
+  enabled: true
+dashboardsConfigMaps:
+  - configMapName: dashboard-ksm
+    fileName: 13332_rev12.json
+
+datasources:
+  secretDefinition:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server
+        access: proxy
+        isDefault: true
+
+notifiers:
+  configMapName: "aws-email-contact-point"
+
+alerting:
+  configMapName: "aws-k3s-node-alerts"
+
+persistence:
+  size: 2Gi
+
+service:
+  type: LoadBalancer
+  nodePorts:
+    grafana: "30080"
+
+networkPolicy:
+  enabled: false
+
+metrics:
+  enabled: true
